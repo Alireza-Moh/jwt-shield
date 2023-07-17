@@ -115,6 +115,11 @@ class Token
         return $this->expirationTime;
     }
 
+    /**
+     * Checks if the token is valid based on the provided signature.
+     * @param string $expectedSignature
+     * @return bool true if its valid and false if not
+     */
     public function isValid(string $expectedSignature): bool
     {
         if ($this->token === '') {
@@ -123,6 +128,11 @@ class Token
         return hash_equals($expectedSignature, $this->signature);
     }
 
+    /**
+     * Checks if the token is expired. It also takes and custom expiration time as a parameter.
+     * @param ?int $providedExpireTime
+     * @return bool
+     */
     public function isExpired(?int $providedExpireTime = null): bool
     {
         if (is_null($providedExpireTime)) {
