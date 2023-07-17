@@ -2,8 +2,6 @@
 
 namespace AlirezaMoh\JwtShield\Supports\Traits;
 
-use AlirezaMoh\JwtShield\Exceptions\MissingKeyException;
-use AlirezaMoh\JwtShield\Exceptions\MissingSecretKeyException;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 /**
  * Trait Signer
