@@ -1,7 +1,6 @@
 <?php
 namespace AlirezaMoh\JwtShield;
 
-use AlirezaMoh\JwtShield\Exceptions\AlgorithmNotFoundException;
 use AlirezaMoh\JwtShield\Exceptions\MissingKeyException;
 use AlirezaMoh\JwtShield\Services\Verifiers\ECDSAVerifier;
 use AlirezaMoh\JwtShield\Services\Verifiers\HMACVerifier;
@@ -41,7 +40,6 @@ class Verifier
      *
      * @return bool Returns true if the token is valid, false otherwise.
      *
-     * @throws AlgorithmNotFoundException if the algorithm is not supported.
      * @throws MissingKeyException if a required key is missing.
      */
     public function validateToken(): bool
@@ -50,7 +48,6 @@ class Verifier
             JWTAlgorithm::HS256,  JWTAlgorithm::HS384, JWTAlgorithm::HS512 => (new HMACVerifier($this->providedToken))->isTokenValid(),
             JWTAlgorithm::RS256, JWTAlgorithm::RS384, JWTAlgorithm::RS512 => (new RSAVerifier($this->providedToken))->isTokenValid(),
             JWTAlgorithm::ES256, JWTAlgorithm::ES384, JWTAlgorithm::ES512 => (new ECDSAVerifier($this->providedToken))->isTokenValid(),
-            default => throw new AlgorithmNotFoundException($this->token->getAlgorithm())
         };
     }
 }
