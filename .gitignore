@@ -1,0 +1,10 @@
+/vendor/
+/.idea/
+/.vscode
+/keys/*
+!/keys/.gitkeep
+public/
+docker/
+docker-compose.yaml
+start
+.env

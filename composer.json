@@ -1,0 +1,35 @@
+{
+  "name": "alireza-moh/jwt-shield",
+  "description": "It provides a simple way for handling JWT tokens",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "AlirezaMoh\\JwtShield\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Alireza Mohammadi"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "ext-openssl": "*",
+    "vlucas/phpdotenv": "^5.5@dev"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+    "generate-secret-key": "php scripts/generateSecretKey.php",
+    "generate-public-and-private-key": "php scripts/generatePrivateAndPublicKey.php"
+  }
+}
