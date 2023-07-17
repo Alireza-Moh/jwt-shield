@@ -7,6 +7,7 @@ use AlirezaMoh\JwtShield\Supports\Traits\Base64;
 use AlirezaMoh\JwtShield\Supports\Traits\Key;
 use AlirezaMoh\JwtShield\Supports\Traits\Signer;
 use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
+use InvalidArgumentException;
 
 /**
  * Abstract base class for signatures.

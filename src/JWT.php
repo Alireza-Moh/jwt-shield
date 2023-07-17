@@ -1,7 +1,6 @@
 <?php
 namespace AlirezaMoh\JwtShield;
 
-use AlirezaMoh\JwtShield\Exceptions\AlgorithmNotFoundException;
 use AlirezaMoh\JwtShield\Exceptions\MissingKeyException;
 use AlirezaMoh\JwtShield\Services\Signatures\ECDSASignature;
 use AlirezaMoh\JwtShield\Services\Signatures\HMACSignature;
@@ -35,9 +34,9 @@ class JWT
      *
      * @param array $customClaims The custom claims for the JWT.
      * @param JWTAlgorithm $algorithm The algorithm used for signing the JWT.
-     * @param int|null $expireTime The expiration time for the JWT (optional).
+     * @param ?int $expireTime The expiration time for the JWT (optional).
      */
-    public function __construct(array $customClaims,JWTAlgorithm $algorithm, int $expireTime = null)
+    public function __construct(array $customClaims,JWTAlgorithm $algorithm, ?int $expireTime = null)
     {
         $this->customClaims = $customClaims;
         $this->algorithm = $algorithm;
@@ -50,7 +49,6 @@ class JWT
      *
      * @return string The generated JWT token.
      *
-     * @throws AlgorithmNotFoundException if the algorithm is not supported.
      * @throws MissingKeyException if a required key is missing.
      */
     public function getToken(): string
@@ -59,7 +57,6 @@ class JWT
             JWTAlgorithm::HS256,  JWTAlgorithm::HS384, JWTAlgorithm::HS512 => (new HMACSignature($this->algorithm, $this->customClaims, $this->expireTime))->generate(),
             JWTAlgorithm::RS256, JWTAlgorithm::RS384, JWTAlgorithm::RS512 => (new RSASignature($this->algorithm, $this->customClaims, $this->expireTime))->generate(),
             JWTAlgorithm::ES256, JWTAlgorithm::ES384, JWTAlgorithm::ES512 => (new ECDSASignature($this->algorithm, $this->customClaims, $this->expireTime))->generate(),
-            default => throw new AlgorithmNotFoundException($this->algorithm)
         };
     }
 
