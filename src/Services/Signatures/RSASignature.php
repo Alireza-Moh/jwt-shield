@@ -5,10 +5,21 @@ namespace AlirezaMoh\JwtShield\Services\Signatures;
 use AlirezaMoh\JwtShield\Exceptions\MissingKeyException;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 
+/**
+ * Represents an RSA signature for JWT (JSON Web Token) generation.
+ *
+ * @throws MissingKeyException if the private key is missing.
+ */
 class RSASignature extends BaseSignature
 {
     /**
-     * @throws MissingKeyException
+     * RSASignature constructor.
+     *
+     * @param JWTAlgorithm $algorithm The algorithm used for signing.
+     * @param array $customClaims Additional custom claims for the JWT.
+     * @param int|null $expireTime The expiration time for the JWT (optional).
+     *
+     * @throws MissingKeyException if the private key is missing.
      */
     public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expireTime = null)
     {
@@ -16,6 +27,11 @@ class RSASignature extends BaseSignature
         $this->privateKey = $this->getPrivateKey();
     }
 
+    /**
+     * Generates the RSA signature for the JWT.
+     *
+     * @return string The generated RSA signature.
+     */
     public function generate(): string
     {
         $header = $this->prepareHeader($this->algorithm);
@@ -26,6 +42,13 @@ class RSASignature extends BaseSignature
         return $header . '.' . $payload . '.' . $signature;
     }
 
+    /**
+     * Signs the given data using RSA with the private key.
+     *
+     * @param string $data The data to sign.
+     *
+     * @return string The base64-encoded RSA signature.
+     */
     private function signRsa(string $data): string
     {
         $privateKey = openssl_pkey_get_private($this->privateKey);

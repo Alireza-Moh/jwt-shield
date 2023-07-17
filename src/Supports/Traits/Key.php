@@ -5,6 +5,11 @@ namespace AlirezaMoh\JwtShield\Supports\Traits;
 
 use AlirezaMoh\JwtShield\Exceptions\MissingKeyException;
 
+/**
+ * Trait Key
+ *
+ * This trait provides methods for getting the public and private keys and the secret key.
+ */
 trait Key
 {
     /**
@@ -29,6 +34,10 @@ trait Key
         return file_get_contents("../keys/private_key.pem");
     }
 
+    /**
+     * Gets the secret key from the .env file
+     * @return string the secret key
+     */
     public function getSecretKey(): string
     {
         return $_ENV["SECRET_KEY"];

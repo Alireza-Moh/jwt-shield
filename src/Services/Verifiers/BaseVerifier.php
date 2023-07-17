@@ -39,16 +39,33 @@ abstract class BaseVerifier
      */
     abstract public function isTokenValid(): bool;
 
+    /**
+     * Verifies if the provided signature matches the expected signature and the token is not expired.
+     *
+     * @param string $expectedSignature The expected signature to verify against.
+     *
+     * @return bool Returns true if the signature is valid and the token is not expired, false otherwise.
+     */
     public function verify(string $expectedSignature): bool
     {
         return !$this->token->isExpired() && $this->token->isValid($expectedSignature);
     }
 
+    /**
+     * Checks if the token is expired.
+     *
+     * @return bool Returns true if the token is expired, false otherwise.
+     */
     public function isTokenExpired(): bool
     {
         return $this->token->isExpired();
     }
 
+    /**
+     * Formats the expiration time of the token to a readable string representation.
+     *
+     * @return string The formatted expiration time in "Y-m-d H:i:s" format.
+     */
     private function formatExpiration(): string
     {
         return DateTime::createFromFormat('U', $this->token->getExpirationTime())->format("Y-m-d H:i:s");
