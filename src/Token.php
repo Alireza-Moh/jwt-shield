@@ -17,7 +17,7 @@ class Token
     /**
      * @var string The JWT token.
      */
-    protected string $token;
+    protected string $providedToken;
 
     /**
      * @var array The decoded header of the JWT token.
@@ -49,12 +49,12 @@ class Token
     /**
      * Token constructor.
      *
-     * @param string $token The JWT token.
+     * @param string $providedToken The JWT token.
      */
-    public function __construct(string $token) {
-        $this->token = $token;
+    public function __construct(string $providedToken) {
+        $this->providedToken = $providedToken;
 
-        if ($token !== '') {
+        if ($providedToken !== '') {
             $this->parseToken();
         }
     }
@@ -64,7 +64,7 @@ class Token
      */
     public function getToken(): string
     {
-        return $this->token;
+        return $this->providedToken;
     }
 
     /**
@@ -122,7 +122,7 @@ class Token
      */
     public function isValid(string $expectedSignature): bool
     {
-        if ($this->token === '') {
+        if ($this->providedToken === '') {
             return false;
         }
         return hash_equals($expectedSignature, $this->signature);
@@ -148,7 +148,7 @@ class Token
      */
     private function parseToken(): void
     {
-        [$header, $payload, $this->signature] = explode('.', $this->token);
+        [$header, $payload, $this->signature] = explode('.', $this->providedToken);
 
         // Decode the base64-encoded header and payload
         $this->header = $this->decodeBase64($header);

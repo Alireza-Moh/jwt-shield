@@ -7,7 +7,6 @@ use AlirezaMoh\JwtShield\Supports\Traits\Base64;
 use AlirezaMoh\JwtShield\Supports\Traits\Key;
 use AlirezaMoh\JwtShield\Supports\Traits\Signer;
 use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
-use InvalidArgumentException;
 
 /**
  * Abstract base class for signatures.
@@ -42,13 +41,13 @@ abstract class BaseSignature
      *
      * @var mixed
      */
-    protected ?int $expireTime;
+    protected ?int $expiration;
 
 
-    public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expireTime = null) {
+    public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expiration = null) {
         $this->algorithm = $algorithm;
         $this->customClaims = $customClaims;
-        $this->expireTime = $expireTime;
+        $this->expiration = $expiration;
     }
 
     /**
@@ -61,12 +60,12 @@ abstract class BaseSignature
     /**
      * Set the expiration time for the token.
      *
-     * @param ?int $expireTime The expiration time for the token.
+     * @param ?int $expiration The expiration time for the token.
      * @return void
      */
-    public function setExpireTime(?int $expireTime): void
+    public function setExpiration(?int $expiration): void
     {
-        $this->expireTime = $expireTime;
+        $this->expiration = $expiration;
     }
 
     /**
@@ -88,8 +87,8 @@ abstract class BaseSignature
     /**
      * @return int|null
      */
-    public function getExpireTime(): ?int
+    public function getExpiration(): ?int
     {
-        return $this->expireTime;
+        return $this->expiration;
     }
 }

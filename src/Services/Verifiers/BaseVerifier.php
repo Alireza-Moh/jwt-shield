@@ -25,11 +25,11 @@ abstract class BaseVerifier
     /**
      * The verifier constructor.
      *
-     * @param string $token The JWT token to verify.
+     * @param string $providedToken The JWT token to verify.
      */
-    public function __construct(string $token)
+    public function __construct(string $providedToken)
     {
-        $this->token = new Token($token);
+        $this->token = new Token($providedToken);
     }
 
     /**
