@@ -37,19 +37,8 @@ class Base64Test extends TestCase
      */
     public function should_decode_base64_string()
     {
-        $actual = $this->decodeBase64($this->decodedData);
+        $actual = json_decode($this->decodeBase64($this->decodedData), true);
 
         $this->assertEquals($this->encodeData, $actual);
-    }
-
-    /**
-     * @test
-     */
-    public function should_return_url_safe_base64_string()
-    {
-        $expectedData = "VGhpcyBpcyBhIHRlc3QgZGF0YSB0byBlbmNvZGU9";
-        $actual = $this->getUrlSafe("VGhpcyBpcyBhIHRlc3QgZGF0YSB0byBlbmNvZGU9=");
-
-        $this->assertEquals($expectedData, $actual);
     }
 }

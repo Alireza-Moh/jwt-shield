@@ -33,7 +33,7 @@ final class Token
     /**
      * @var string The signature of the JWT token.
      */
-    protected string $signature;
+    public string $signature;
 
     /**
      * @var JWTAlgorithm The algorithm used for signing and verifying the JWT token.
@@ -46,6 +46,9 @@ final class Token
     protected string $issuer;
 
     protected DateTime $expirationTime;
+
+    protected string $originalHeader;
+    protected string $originalPayload;
 
     /**
      * Token constructor.
@@ -117,6 +120,22 @@ final class Token
     }
 
     /**
+     * @return string
+     */
+    public function getOriginalHeader(): string
+    {
+        return $this->originalHeader;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalPayload(): string
+    {
+        return $this->originalPayload;
+    }
+
+    /**
      * Checks if the token is valid based on the provided signature.
      * @param string $expectedSignature
      * @return bool true if its valid and false if not
@@ -150,11 +169,14 @@ final class Token
      */
     private function parseToken(): void
     {
-        [$header, $payload, $this->signature] = explode('.', $this->providedToken);
+        [$header, $payload, $signature] = explode('.', $this->providedToken);
 
-        // Decode the base64-encoded header and payload
-        $this->header = $this->decodeBase64($header);
-        $this->payload = $this->decodeBase64($payload);
+        $this->header = json_decode($this->decodeBase64($header), true);
+        $this->payload = json_decode($this->decodeBase64($payload), true);
+        $this->signature = $this->decodeBase64($signature);
+
+        $this->originalHeader = $header;
+        $this->originalPayload = $payload;
 
         // Extract the algorithm, issuer and the expiration time
         $this->algorithm = JWTAlgorithm::from($this->header['alg']);

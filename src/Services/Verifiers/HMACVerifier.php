@@ -25,7 +25,8 @@ class HMACVerifier extends BaseVerifier
     {
         $expectedSignature = $this->getExpectedSignature($secretKey);
 
-        return $this->verify($expectedSignature);
+        return !$this->token->isExpired() && hash_equals($expectedSignature, $this->token->getSignature());
+
     }
 
     /**
@@ -35,9 +36,7 @@ class HMACVerifier extends BaseVerifier
      */
     public function getExpectedSignature(string $secretKey): string
     {
-        $header = $this->prepareHeader($this->token->getAlgorithm());
-        $payload = $this->preparePayload($this->token->getExpirationTime(), $this->token->getPayload());
-
-        return $this->encodeBase64($this->sign($this->token->getAlgorithm(), $header . '.' . $payload,  $secretKey));
+        $data = $this->token->getOriginalHeader() . '.' . $this->token->getOriginalPayload();
+        return $this->sign($this->token->getAlgorithm(), $data, $secretKey);
     }
 }

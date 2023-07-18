@@ -2,6 +2,7 @@
 
 namespace AlirezaMoh\JwtShield\Services\Signatures;
 
+use AlirezaMoh\JwtShield\Exceptions\RSAException;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use DateTime;
 
@@ -22,6 +23,7 @@ class RSASignature extends BaseSignature
      * @param array $customClaims The custom claims.
      * @param string $privateKey The private key for generating the signature.
      * @return string The generated RSA signature.
+     * @throws RSAException
      */
     public function generate(DateTime $expiration, array $customClaims, string $privateKey): string
     {
@@ -41,12 +43,16 @@ class RSASignature extends BaseSignature
      * @param string $data The data to sign.
      * @param string $privateKey The private key for generating the signature.
      * @return string The base64-encoded RSA signature.
+     * @throws RSAException
      */
     private function signRsa(string $data, string $privateKey): string
     {
         $privateKey = openssl_pkey_get_private($privateKey);
-        openssl_sign($data, $signature, $privateKey, $this->algorithm->getHashAlgorithm());
-        unset($privateKey);
+
+        $isSigned = openssl_sign($data, $signature, $privateKey, $this->algorithm->getHashAlgorithm());
+        if (!$isSigned) {
+            throw new RSAException('Failed to generate RSA signature.');
+        }
 
         return $this->encodeBase64($signature);
     }
