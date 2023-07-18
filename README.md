@@ -18,6 +18,7 @@ composer install
 ```
 
 ### Generating secret key
+Create an .env file in your root folder before generating the secret key and then execute the key generator
 ```sh
 composer generate-secret-key
 ```
