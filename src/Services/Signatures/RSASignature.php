@@ -17,13 +17,13 @@ class RSASignature extends BaseSignature
      *
      * @param JWTAlgorithm $algorithm The algorithm used for signing.
      * @param array $customClaims Additional custom claims for the JWT.
-     * @param int|null $expireTime The expiration time for the JWT (optional).
+     * @param ?int $expiration The expiration time for the JWT (optional).
      *
      * @throws MissingKeyException if the private key is missing.
      */
-    public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expireTime = null)
+    public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expiration = null)
     {
-        parent::__construct($algorithm, $customClaims, $expireTime);
+        parent::__construct($algorithm, $customClaims, $expiration);
         $this->privateKey = $this->getPrivateKey();
     }
 
@@ -35,7 +35,7 @@ class RSASignature extends BaseSignature
     public function generate(): string
     {
         $header = $this->prepareHeader($this->algorithm);
-        $payload = $this->preparePayload($this->customClaims, $this->expireTime);
+        $payload = $this->preparePayload($this->customClaims, $this->expiration);
 
         $signature = $this->signRsa($header . '.' . $payload);
 

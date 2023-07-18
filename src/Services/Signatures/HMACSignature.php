@@ -16,11 +16,11 @@ class HMACSignature extends BaseSignature
      *
      * @param JWTAlgorithm $algorithm The JWT algorithm object.
      * @param array $customClaims An array of custom claims to include in the payload.
-     * @param ?int $expireTime The expiration time in Unix timestamp format. Null for no expiration.
+     * @param ?int $expiration The expiration time in Unix timestamp format. Null for no expiration.
      */
-    public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expireTime = null)
+    public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expiration = null)
     {
-        parent::__construct($algorithm, $customClaims, $expireTime);
+        parent::__construct($algorithm, $customClaims, $expiration);
     }
 
     /**
@@ -31,7 +31,7 @@ class HMACSignature extends BaseSignature
     public function generate(): string
     {
         $header = $this->prepareHeader($this->algorithm);
-        $payload = $this->preparePayload($this->customClaims, $this->expireTime);
+        $payload = $this->preparePayload($this->customClaims, $this->expiration);
 
         $encodedSignature = $this->encodeBase64($this->sign($this->algorithm, $header . '.' . $payload));
 

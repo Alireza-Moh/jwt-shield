@@ -12,11 +12,11 @@ class HMACVerifier extends BaseVerifier
     /**
      * HMACVerifier constructor.
      *
-     * @param string $token The JWT token to verify.
+     * @param string $providedToken The JWT token to verify.
      */
-    public function __construct(string $token)
+    public function __construct(string $providedToken)
     {
-        parent::__construct($token);
+        parent::__construct($providedToken);
     }
 
     /**
