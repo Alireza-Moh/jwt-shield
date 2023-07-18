@@ -14,7 +14,6 @@
 ## Installation
 ```sh
 composer require alireza/jwt-shield
-composer install
 ```
 
 ### Generating secret key
