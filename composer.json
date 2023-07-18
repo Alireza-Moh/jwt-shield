@@ -30,6 +30,12 @@
     "test": "vendor/bin/phpunit",
     "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
     "generate-secret-key": "php scripts/generateSecretKey.php",
-    "generate-public-and-private-key": "php scripts/generatePrivateAndPublicKey.php"
+    "generate-public-and-private-key": "php scripts/generatePrivateAndPublicKey.php",
+    "post-install-cmd": [
+      "php scripts/update-composer-scripts.php"
+    ],
+    "post-update-cmd": [
+      "php scripts/update-composer-scripts.php"
+    ]
   }
 }
