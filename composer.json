@@ -10,7 +10,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Test\\": "tests/"
+      "AlirezaMoh\\JwtShield\\Test\\": "tests/"
     }
   },
   "authors": [

@@ -1,7 +1,8 @@
 <?php
 
-namespace AlirezaMoh\JwtShield\Services\Signatures;
+namespace AlirezaMoh\JwtShield\Tests\Services\Signatures;
 
+use AlirezaMoh\JwtShield\Services\Signatures\ECDSASignature;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use PHPUnit\Framework\TestCase;
 
