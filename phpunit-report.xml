@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="3" assertions="5" errors="0" warnings="0" failures="0" skipped="0" time="0.003151">
-    <testsuite name="test" tests="3" assertions="5" errors="0" warnings="0" failures="0" skipped="0" time="0.003151">
-      <testsuite name="AlirezaMoh\JwtShield\JWTTest" file="/var/www/tests/JWTTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.002908">
-        <testcase name="should_return_expected_token" class="AlirezaMoh\JwtShield\JWTTest" classname="AlirezaMoh.JwtShield.JWTTest" file="/var/www/tests/JWTTest.php" line="24" assertions="1" time="0.002908"/>
+  <testsuite name="" tests="12" assertions="15" errors="0" warnings="0" failures="0" skipped="0" time="0.003571">
+    <testsuite name="test" tests="12" assertions="15" errors="0" warnings="0" failures="0" skipped="0" time="0.003571">
+      <testsuite name="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" tests="9" assertions="9" errors="0" warnings="0" failures="0" skipped="0" time="0.001048">
+        <testsuite name="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest::should_set_the_correct_algorithm" tests="9" assertions="9" errors="0" warnings="0" failures="0" skipped="0" time="0.001048">
+          <testcase name="should_set_the_correct_algorithm with data set #0" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000949"/>
+          <testcase name="should_set_the_correct_algorithm with data set #1" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000013"/>
+          <testcase name="should_set_the_correct_algorithm with data set #2" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000013"/>
+          <testcase name="should_set_the_correct_algorithm with data set #3" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000011"/>
+          <testcase name="should_set_the_correct_algorithm with data set #4" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000014"/>
+          <testcase name="should_set_the_correct_algorithm with data set #5" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000014"/>
+          <testcase name="should_set_the_correct_algorithm with data set #6" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000014"/>
+          <testcase name="should_set_the_correct_algorithm with data set #7" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000010"/>
+          <testcase name="should_set_the_correct_algorithm with data set #8" class="AlirezaMoh\JwtShield\Services\Signatures\BaseSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.BaseSignatureTest" file="/var/www/tests/Services/Signatures/BaseSignatureTest.php" line="14" assertions="1" time="0.000010"/>
+        </testsuite>
       </testsuite>
-      <testsuite name="AlirezaMoh\JwtShield\Services\Signatures\HMACSignatureTest" file="/var/www/tests/Services/Signatures/HMACSignatureTest.php" tests="2" assertions="4" errors="0" warnings="0" failures="0" skipped="0" time="0.000243">
-        <testcase name="should_set_correct_values" class="AlirezaMoh\JwtShield\Services\Signatures\HMACSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.HMACSignatureTest" file="/var/www/tests/Services/Signatures/HMACSignatureTest.php" line="22" assertions="3" time="0.000021"/>
-        <testcase name="should_generate_correct_token" class="AlirezaMoh\JwtShield\Services\Signatures\HMACSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.HMACSignatureTest" file="/var/www/tests/Services/Signatures/HMACSignatureTest.php" line="33" assertions="1" time="0.000222"/>
+      <testsuite name="AlirezaMoh\JwtShield\Services\Signatures\ECDSASignatureTest" file="/var/www/tests/Services/Signatures/ECDSASignatureTest.php" tests="1" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.001436">
+        <testcase name="should_not_be_empty_token" class="AlirezaMoh\JwtShield\Services\Signatures\ECDSASignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.ECDSASignatureTest" file="/var/www/tests/Services/Signatures/ECDSASignatureTest.php" line="44" assertions="2" time="0.001436"/>
+      </testsuite>
+      <testsuite name="AlirezaMoh\JwtShield\Services\Signatures\HMACSignatureTest" file="/var/www/tests/Services/Signatures/HMACSignatureTest.php" tests="1" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.000078">
+        <testcase name="should_not_be_empty_token" class="AlirezaMoh\JwtShield\Services\Signatures\HMACSignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.HMACSignatureTest" file="/var/www/tests/Services/Signatures/HMACSignatureTest.php" line="13" assertions="2" time="0.000078"/>
+      </testsuite>
+      <testsuite name="AlirezaMoh\JwtShield\Services\Signatures\RSASignatureTest" file="/var/www/tests/Services/Signatures/RSASignatureTest.php" tests="1" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.001010">
+        <testcase name="should_not_be_empty_token" class="AlirezaMoh\JwtShield\Services\Signatures\RSASignatureTest" classname="AlirezaMoh.JwtShield.Services.Signatures.RSASignatureTest" file="/var/www/tests/Services/Signatures/RSASignatureTest.php" line="44" assertions="2" time="0.001010"/>
       </testsuite>
     </testsuite>
   </testsuite>

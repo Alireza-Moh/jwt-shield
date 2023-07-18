@@ -7,7 +7,7 @@ use AlirezaMoh\JwtShield\Supports\Traits\Signer;
 use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
 use AlirezaMoh\JwtShield\Token;
 
-abstract class BaseVerifier
+class BaseVerifier
 {
     use Base64, TokenGenerator, Signer;
 

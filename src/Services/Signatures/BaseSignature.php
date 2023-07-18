@@ -10,7 +10,7 @@ use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
 /**
  * Abstract base class for signatures.
  */
-abstract class BaseSignature
+class BaseSignature
 {
     use Base64, TokenGenerator, Signer;
 
