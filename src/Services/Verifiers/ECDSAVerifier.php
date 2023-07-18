@@ -2,26 +2,16 @@
 
 namespace AlirezaMoh\JwtShield\Services\Verifiers;
 
-use AlirezaMoh\JwtShield\Exceptions\MissingKeyException;
+use AlirezaMoh\JwtShield\Token;
 
 /**
  * Represents an ECDSA verifier for JWT (JSON Web Token) validation.
- *
- * @throws MissingKeyException if the public key is missing.
  */
 class ECDSAVerifier extends BaseVerifier
 {
-    /**
-     * ECDSAVerifier constructor.
-     *
-     * @param string $providedToken The JWT token to verify.
-     *
-     * @throws MissingKeyException if the public key is missing.
-     */
-    public function __construct(string $providedToken)
+    public function __construct(Token $token)
     {
-        parent::__construct($providedToken);
-        $this->publicKey = $this->getPublicKey();
+        parent::__construct($token);
     }
 
     /**
@@ -29,9 +19,12 @@ class ECDSAVerifier extends BaseVerifier
      *
      * @return bool Returns true if the token's signature is valid, false otherwise.
      */
-    public function isTokenValid(): bool
+    public function isTokenValid(string $publicKey): bool
     {
-        $expectedSignature = $this->signEcdsa(json_encode($this->token->getHeader()).'.'.json_encode($this->token->getPayload()));
+        $expectedSignature = $this->signEcdsa(
+            json_encode($this->token->getHeader()).'.'.json_encode($this->token->getPayload()),
+            $publicKey
+        );
 
         return $this->verify($expectedSignature);
     }
@@ -40,12 +33,13 @@ class ECDSAVerifier extends BaseVerifier
      * Signs the given data using ECDSA with the public key and retrieves the token's signature.
      *
      * @param string $data The data to sign.
+     * @param string $publicKey The public key to use for signing.
      *
      * @return string The token's signature.
      */
-    private function signEcdsa(string $data): string
+    private function signEcdsa(string $data, string $publicKey): string
     {
-        $publicKey = openssl_pkey_get_public($this->publicKey);
+        $publicKey = openssl_pkey_get_public($publicKey);
         openssl_verify($data, $this->token->getSignature(), $publicKey);
         unset($publicKey);
 

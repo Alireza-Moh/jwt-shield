@@ -2,6 +2,8 @@
 
 namespace AlirezaMoh\JwtShield\Services\Verifiers;
 
+use AlirezaMoh\JwtShield\Token;
+
 /**
  * Class HMACVerifier
  *
@@ -9,24 +11,19 @@ namespace AlirezaMoh\JwtShield\Services\Verifiers;
  */
 class HMACVerifier extends BaseVerifier
 {
-    /**
-     * HMACVerifier constructor.
-     *
-     * @param string $providedToken The JWT token to verify.
-     */
-    public function __construct(string $providedToken)
+    public function __construct(Token $token)
     {
-        parent::__construct($providedToken);
+        parent::__construct($token);
     }
 
     /**
      * Verify the JWT token using HMAC signature.
-     *
+     * @param string $secretKey The secret key used to sign the token.
      * @return bool True if the token is verified successfully, false otherwise.
      */
-    public function isTokenValid(): bool
+    public function isTokenValid(string $secretKey): bool
     {
-        $expectedSignature = $this->getExpectedSignature();
+        $expectedSignature = $this->getExpectedSignature($secretKey);
 
         return $this->verify($expectedSignature);
     }
@@ -36,11 +33,11 @@ class HMACVerifier extends BaseVerifier
      *
      * @return string The expected signature for the payload.
      */
-    public function getExpectedSignature(): string
+    public function getExpectedSignature(string $secretKey): string
     {
         $header = $this->prepareHeader($this->token->getAlgorithm());
-        $payload = $this->preparePayload($this->token->getPayload());
+        $payload = $this->preparePayload($this->token->getExpirationTime(), $this->token->getPayload());
 
-        return $this->encodeBase64($this->sign($this->token->getAlgorithm(), $header . '.' . $payload));
+        return $this->encodeBase64($this->sign($this->token->getAlgorithm(), $header . '.' . $payload,  $secretKey));
     }
 }

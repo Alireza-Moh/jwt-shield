@@ -4,7 +4,6 @@ namespace AlirezaMoh\JwtShield\Services\Signatures;
 
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;
-use AlirezaMoh\JwtShield\Supports\Traits\Key;
 use AlirezaMoh\JwtShield\Supports\Traits\Signer;
 use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
 
@@ -13,14 +12,7 @@ use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
  */
 abstract class BaseSignature
 {
-    use Base64, TokenGenerator, Signer, Key;
-
-    /**
-     * The private key used for generating or verifying tokens.
-     *
-     * @var string
-     */
-    protected string $privateKey;
+    use Base64, TokenGenerator, Signer;
 
     /**
      * The algorithm used for generating or verifying tokens.
@@ -36,36 +28,19 @@ abstract class BaseSignature
      */
     protected array $customClaims;
 
-    /**
-     * Expiration time for the token
-     *
-     * @var mixed
-     */
-    protected ?int $expiration;
-
-
-    public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expiration = null) {
+    public function __construct(JWTAlgorithm $algorithm)
+    {
         $this->algorithm = $algorithm;
-        $this->customClaims = $customClaims;
-        $this->expiration = $expiration;
     }
 
     /**
-     * Generates a JWT token with the provided custom claims.
+     * Adds additional claims to the JWT.
      *
-     * @return string The generated JWT token.
+     * @param array $data The additional claims to add.
      */
-    abstract public function generate(): string;
-
-    /**
-     * Set the expiration time for the token.
-     *
-     * @param ?int $expiration The expiration time for the token.
-     * @return void
-     */
-    public function setExpiration(?int $expiration): void
+    public function addClaims(array $data): void
     {
-        $this->expiration = $expiration;
+        $this->customClaims = array_merge($this->customClaims, $data);
     }
 
     /**
@@ -82,13 +57,5 @@ abstract class BaseSignature
     public function getCustomClaims(): array
     {
         return $this->customClaims;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getExpiration(): ?int
-    {
-        return $this->expiration;
     }
 }

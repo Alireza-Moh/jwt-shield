@@ -3,6 +3,7 @@
 namespace AlirezaMoh\JwtShield\Supports\Traits;
 
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
+use DateTime;
 
 /**
  * Trait TokenGenerator
@@ -22,7 +23,7 @@ trait TokenGenerator
     {
         $header = [
             "alg" => $algorithm->getAlgorithm(),
-            "typ" => "JWT"
+            "typ" => $type
         ];
 
         return $this->encodeBase64(json_encode($header));
@@ -32,19 +33,16 @@ trait TokenGenerator
      * Prepare the JWT payload and merge the custom claims.
      *
      * @param array $customClaims An array of custom claims to include in the payload.
-     * @param int|null $expireTime The expiration time in Unix timestamp format. Null for no expiration.
+     * @param DateTime $expireTime The expiration time in Unix timestamp format. Null for no expiration.
      * @param string $issuer The issuer of the token. Default is "JWT shield".
      * @return string The encoded payload.
      */
-    public function preparePayload(array $customClaims = [], int|null $expireTime = null, string $issuer = "JWT shield"): string
+    public function preparePayload(DateTime $expireTime, array $customClaims = [], string $issuer = "JWT shield"): string
     {
         $payload = array_merge($customClaims, [
             "iss" => $issuer,
+            "exp" => $expireTime->getTimestamp() * 1000
         ]);
-
-        if ($expireTime !== null) {
-            $payload["exp"] = $expireTime;
-        }
 
         return $this->encodeBase64(json_encode($payload));
     }

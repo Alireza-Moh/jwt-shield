@@ -1,53 +1,37 @@
 <?php
 namespace AlirezaMoh\JwtShield;
 
-use AlirezaMoh\JwtShield\Exceptions\MissingKeyException;
 use AlirezaMoh\JwtShield\Services\Verifiers\ECDSAVerifier;
 use AlirezaMoh\JwtShield\Services\Verifiers\HMACVerifier;
 use AlirezaMoh\JwtShield\Services\Verifiers\RSAVerifier;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
+use InvalidArgumentException;
 
 /**
  * Represents a JWT (JSON Web Token) verifier.
  * It provides an interface for validating a JWT token.
  */
-class Verifier
+final class Verifier
 {
     /**
-     * @var Token The JWT token to verify.
-     */
-    private Token $token;
-
-    /**
-     * @var string The provided JWT token.
-     */
-    private string $providedToken;
-
-    /**
-     * Verifier constructor.
+     * Based on the specified algorithm, it will return the signature builder for generating the token.
      *
-     * @param string $providedToken The provided JWT token to verify.
+     * @param string $providedToken The token to be verified.
+     *
+     * @return HMACVerifier|RSAVerifier|ECDSAVerifier The signature builder for generating the token.
      */
-    public function __construct(string $providedToken)
+    public static function getSignatureBuilder(string $providedToken): HMACVerifier|RSAVerifier|ECDSAVerifier
     {
-        $this->providedToken = $providedToken;
-        $this->token = new Token($providedToken);
-    }
+        if (empty($providedToken)) {
+            throw new InvalidArgumentException('The token cannot be empty');
+        }
 
+        $token = new Token($providedToken);
 
-    /**
-     * Validates the JWT token by verifying its signature and other claims.
-     *
-     * @return bool Returns true if the token is valid, false otherwise.
-     *
-     * @throws MissingKeyException if a required key is missing.
-     */
-    public function validateToken(): bool
-    {
-        return match ($this->token->getAlgorithm()) {
-            JWTAlgorithm::HS256,  JWTAlgorithm::HS384, JWTAlgorithm::HS512 => (new HMACVerifier($this->providedToken))->isTokenValid(),
-            JWTAlgorithm::RS256, JWTAlgorithm::RS384, JWTAlgorithm::RS512 => (new RSAVerifier($this->providedToken))->isTokenValid(),
-            JWTAlgorithm::ES256, JWTAlgorithm::ES384, JWTAlgorithm::ES512 => (new ECDSAVerifier($this->providedToken))->isTokenValid(),
+        return match ($token->getAlgorithm()) {
+            JWTAlgorithm::HS256,  JWTAlgorithm::HS384, JWTAlgorithm::HS512 => (new HMACVerifier($token)),
+            JWTAlgorithm::RS256, JWTAlgorithm::RS384, JWTAlgorithm::RS512 => (new RSAVerifier($token)),
+            JWTAlgorithm::ES256, JWTAlgorithm::ES384, JWTAlgorithm::ES512 => (new ECDSAVerifier($token)),
         };
     }
 }

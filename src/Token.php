@@ -4,13 +4,14 @@ namespace AlirezaMoh\JwtShield;
 
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;
+use DateTime;
 
 /**
  * Class Token
  *
  * Represents a JWT token.
  */
-class Token
+final class Token
 {
     use Base64;
 
@@ -44,7 +45,7 @@ class Token
      */
     protected string $issuer;
 
-    protected ?int $expirationTime;
+    protected DateTime $expirationTime;
 
     /**
      * Token constructor.
@@ -108,9 +109,9 @@ class Token
     }
 
     /**
-     * @return int
+     * @return DateTime
      */
-    public function getExpirationTime(): int
+    public function getExpirationTime(): DateTime
     {
         return $this->expirationTime;
     }
@@ -129,17 +130,18 @@ class Token
     }
 
     /**
-     * Checks if the token is expired. It also takes and custom expiration time as a parameter.
-     * @param ?int $providedExpireTime
+     * Checks if the token is expired
      * @return bool
      */
-    public function isExpired(?int $providedExpireTime = null): bool
+    public function isExpired(): bool
     {
-        if (is_null($providedExpireTime)) {
-            return isset($this->expirationTime) && $this->expirationTime <= time();
-        }
+        $currentDateTime = new DateTime();
+        return $this->expirationTime < $currentDateTime;
+    }
 
-        return $providedExpireTime <= time();
+    public function getFormattedExpirationTime(): string
+    {
+        return $this->expirationTime->format('Y-m-d H:i:s');
     }
 
     /**
@@ -158,11 +160,13 @@ class Token
         $this->algorithm = JWTAlgorithm::from($this->header['alg']);
         $this->issuer = $this->payload['iss'];
 
-        if (isset($this->payload['exp'])) {
-            $this->expirationTime = (int) $this->payload['exp'];
-        }
-        else {
-            $this->expirationTime = null;
-        }
+        $this->setExpirationTime($this->payload['exp']);
+    }
+
+    private function setExpirationTime(int $exp): void
+    {
+        $date = new DateTime();
+        $date->setTimestamp(floor($exp / 1000));
+        $this->expirationTime = $date;
     }
 }

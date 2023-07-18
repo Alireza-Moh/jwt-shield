@@ -3,6 +3,7 @@
 namespace AlirezaMoh\JwtShield\Supports\Traits;
 
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
+use InvalidArgumentException;
 
 
 /**
@@ -17,10 +18,14 @@ trait Signer
      *
      * @param JWTAlgorithm $algorithm The JWT algorithm object.
      * @param string $data The data to be signed.
+     * @param string $secretKey The secret key.
      * @return string The generated signature.
      */
-    public function sign(JWTAlgorithm $algorithm, string $data): string
+    public function sign(JWTAlgorithm $algorithm, string $data, string $secretKey): string
     {
-        return hash_hmac($algorithm->getHashAlgorithm(), $data, $this->getSecretKey(), true);
+        if (empty($secretKey)) {
+            throw new InvalidArgumentException("The secret key can not be empty");
+        }
+        return hash_hmac($algorithm->getHashAlgorithm(), $data, $secretKey, true);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace AlirezaMoh\JwtShield\Services\Signatures;
 
+
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
+use DateTime;
 
 /**
  * Class HMACSignature
@@ -11,30 +13,26 @@ use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
  */
 class HMACSignature extends BaseSignature
 {
-    /**
-     * HMACSignature constructor.
-     *
-     * @param JWTAlgorithm $algorithm The JWT algorithm object.
-     * @param array $customClaims An array of custom claims to include in the payload.
-     * @param ?int $expiration The expiration time in Unix timestamp format. Null for no expiration.
-     */
-    public function __construct(JWTAlgorithm $algorithm, array $customClaims, ?int $expiration = null)
+    public function __construct(JWTAlgorithm $algorithm)
     {
-        parent::__construct($algorithm, $customClaims, $expiration);
+        parent::__construct($algorithm);
     }
 
     /**
      * Generate the JWT with the HMAC signature.
-     *
+     * @param DateTime $expiration The expiration date of the JWT.
+     * @param array $customClaims The custom claims of the JWT.
+     * @param string $secretKey The secret key of the JWT.
      * @return string The generated JWT with the HMAC signature.
      */
-    public function generate(): string
+    public function generate(DateTime $expiration, array $customClaims, string $secretKey): string
     {
+        $this->customClaims = $customClaims;
+
         $header = $this->prepareHeader($this->algorithm);
-        $payload = $this->preparePayload($this->customClaims, $this->expiration);
+        $payload = $this->preparePayload($expiration, $customClaims);
 
-        $encodedSignature = $this->encodeBase64($this->sign($this->algorithm, $header . '.' . $payload));
-
+        $encodedSignature = $this->encodeBase64($this->sign($this->algorithm, $header . '.' . $payload, $secretKey));
         return $header . '.' . $payload . '.' . $encodedSignature;
     }
 }

@@ -1,8 +1,7 @@
 /vendor/
 /.idea/
 /.vscode
-/keys/*
-!/keys/.gitkeep
+keys/
 public/
 docker/
 docker-compose.yaml
