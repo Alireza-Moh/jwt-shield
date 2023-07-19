@@ -1,6 +1,6 @@
 # JWT shield
-## A simple JWT token handler
-
+&nbsp;
+![Logo](/docs/logo.png)
 &nbsp;
 
 > This PHP package provides a simple and convenient way to handle JSON Web Tokens (JWT) in your applications.
