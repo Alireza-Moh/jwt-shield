@@ -164,25 +164,70 @@ final class Token
     }
 
     /**
-     * Parses the JWT token and extracts the header, payload, signature, algorithm, and issuer.
-     *
+     * Parses the provided token and extracts its components.
      */
     private function parseToken(): void
     {
         [$header, $payload, $signature] = explode('.', $this->providedToken);
 
-        $this->header = json_decode($this->decodeBase64($header), true);
-        $this->payload = json_decode($this->decodeBase64($payload), true);
-        $this->signature = $this->decodeBase64($signature);
+        $this->parseHeader($header);
+        $this->parsePayload($payload);
+        $this->parseSignature($signature);
 
         $this->originalHeader = $header;
         $this->originalPayload = $payload;
 
-        // Extract the algorithm, issuer and the expiration time
-        $this->algorithm = JWTAlgorithm::from($this->header['alg']);
-        $this->issuer = $this->payload['iss'];
-
+        $this->extractAlgorithm();
+        $this->extractIssuer();
         $this->setExpirationTime($this->payload['exp']);
+    }
+
+    /**
+     * Parses the header component of the token.
+     *
+     * @param string $header The base64-encoded header string.
+     */
+    private function parseHeader(string $header): void
+    {
+        $decodedHeader = $this->decodeBase64($header);
+        $this->header = json_decode($decodedHeader, true);
+    }
+
+    /**
+     * Parses the payload component of the token.
+     *
+     * @param string $payload The base64-encoded payload string.
+     */
+    private function parsePayload(string $payload): void
+    {
+        $decodedPayload = $this->decodeBase64($payload);
+        $this->payload = json_decode($decodedPayload, true);
+    }
+
+    /**
+     * Parses the signature component of the token.
+     *
+     * @param string $signature The base64-encoded signature string.
+     */
+    private function parseSignature(string $signature): void
+    {
+        $this->signature = $this->decodeBase64($signature);
+    }
+
+    /**
+     * Extracts the algorithm from the parsed header.
+     */
+    private function extractAlgorithm(): void
+    {
+        $this->algorithm = JWTAlgorithm::from($this->header['alg']);
+    }
+
+    /**
+     * Extracts the issuer from the parsed payload.
+     */
+    private function extractIssuer(): void
+    {
+        $this->issuer = $this->payload['iss'];
     }
 
     private function setExpirationTime(int $exp): void
