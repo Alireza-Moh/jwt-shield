@@ -23,7 +23,7 @@ class ECDSASignature extends BaseSignature
      * @param string $privateKey The private key for generating the signature.
      * @return string The generated ECDSA token.
      */
-    public function generate(DateTime $expiration, array $customClaims, string $privateKey): string
+    public function generate(array $customClaims, string $privateKey, DateTime $expiration = new DateTime("+60 min")): string
     {
         $this->customClaims = $customClaims;
         $header = $this->prepareHeader($this->algorithm);

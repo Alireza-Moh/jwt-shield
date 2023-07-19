@@ -20,7 +20,7 @@ final class Verifier
      *
      * @return HMACVerifier|RSAVerifier|ECDSAVerifier The signature builder for generating the token.
      */
-    public static function getSignatureBuilder(string $providedToken): HMACVerifier|RSAVerifier|ECDSAVerifier
+    public static function getVerifierBuilder(string $providedToken): HMACVerifier|RSAVerifier|ECDSAVerifier
     {
         if (empty($providedToken)) {
             throw new InvalidArgumentException('The token cannot be empty');
