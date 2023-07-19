@@ -25,7 +25,7 @@ class HMACSignature extends BaseSignature
      * @param string $secretKey The secret key of the JWT.
      * @return string The generated JWT with the HMAC signature.
      */
-    public function generate(DateTime $expiration, array $customClaims, string $secretKey): string
+    public function generate(array $customClaims, string $secretKey, DateTime $expiration = new DateTime("+60 min")): string
     {
         $this->customClaims = $customClaims;
 

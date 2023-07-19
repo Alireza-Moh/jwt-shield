@@ -17,7 +17,7 @@ class HMACSignatureTest extends TestCase
         $expiration = new \DateTime("+1 day");
         $claims = ["userId" => 545432, "username" => "test"];
 
-        $token = $signature->generate($expiration, $claims, "secret");
+        $token = $signature->generate($claims, "secret", $expiration);
 
         $this->assertNotEmpty($token);
         $this->assertIsString($token);

@@ -16,7 +16,7 @@ class ECDSASignatureTest extends TestCase
         $signature = new ECDSASignature(JWTAlgorithm::HS512);
         $expiration = new \DateTime("+1 day");
         $claims = ["userId" => 545432, "username" => "test"];
-        $token = $signature->generate($expiration, $claims, file_get_contents(__DIR__."/private_key.pem"));
+        $token = $signature->generate($claims, file_get_contents(__DIR__."/private_key.pem"), $expiration);
 
         $this->assertNotEmpty($token);
         $this->assertIsString($token);

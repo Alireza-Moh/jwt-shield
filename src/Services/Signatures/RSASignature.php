@@ -25,7 +25,7 @@ class RSASignature extends BaseSignature
      * @return string The generated RSA signature.
      * @throws RSAException
      */
-    public function generate(DateTime $expiration, array $customClaims, string $privateKey): string
+    public function generate(array $customClaims, string $privateKey, DateTime $expiration = new DateTime("+60 min")): string
     {
         $this->customClaims =  $customClaims;
 
