@@ -10,7 +10,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Test\\": "tests/"
+      "AlirezaMoh\\JwtShield\\Test\\": "tests/"
     }
   },
   "authors": [
@@ -20,22 +20,9 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "ext-openssl": "*",
-    "vlucas/phpdotenv": "^5.5@dev"
+    "ext-openssl": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.6"
-  },
-  "scripts": {
-    "test": "vendor/bin/phpunit",
-    "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-    "generate-secret-key": "php scripts/generateSecretKey.php",
-    "generate-public-and-private-key": "php scripts/generatePrivateAndPublicKey.php",
-    "post-install-cmd": [
-      "php scripts/update-composer-scripts.php"
-    ],
-    "post-update-cmd": [
-      "php scripts/update-composer-scripts.php"
-    ]
   }
 }

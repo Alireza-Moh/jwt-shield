@@ -17,29 +17,18 @@ trait Base64
      */
     public function encodeBase64(string $data): string
     {
-        $base64 = base64_encode($data);
-        return $this->getUrlSafe($base64);
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
     /**
      * Decodes a URL-safe base64 encoded string.
      *
      * @param string $data The URL-safe base64 encoded string to decode.
-     * @return array The decoded data.
+     * @return string The decoded data.
      */
-    public function decodeBase64(string $data): array
+    public function decodeBase64(string $data): string
     {
-        return json_decode(base64_decode($data), true);
-    }
-
-    /**
-     * Replaces characters to make base64 URL-safe.
-     *
-     * @param string $base64 The base64 string to modify.
-     * @return string The URL-safe base64 string.
-     */
-    private function getUrlSafe(string $base64): string
-    {
-        return str_replace(['+', '/', '='], ['-', '_', ''], $base64);
+        $paddedData = str_pad($data, strlen($data) % 4, '=', STR_PAD_RIGHT);
+        return base64_decode(strtr($paddedData, '-_', '+/'));
     }
 }

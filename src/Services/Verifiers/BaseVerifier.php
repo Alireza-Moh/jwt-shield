@@ -2,72 +2,69 @@
 
 namespace AlirezaMoh\JwtShield\Services\Verifiers;
 
+use AlirezaMoh\JwtShield\Exceptions\RSAException;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;
-use AlirezaMoh\JwtShield\Supports\Traits\Key;
 use AlirezaMoh\JwtShield\Supports\Traits\Signer;
 use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
 use AlirezaMoh\JwtShield\Token;
-use DateTime;
+use OpenSSLAsymmetricKey;
 
-abstract class BaseVerifier
+/**
+ * Class BaseVerifier
+ *
+ * Represents a base verifier for JWT (JSON Web Token) validation.
+ */
+class BaseVerifier
 {
-    use Base64, TokenGenerator, Signer, Key;
+    use Base64, TokenGenerator, Signer;
 
     /**
-     * The public key used for verifying tokens.
-     *
-     * @var string
+     * @var Token The JWT token.
      */
-    protected string $publicKey;
-
     protected Token $token;
 
     /**
-     * The verifier constructor.
+     * BaseVerifier constructor.
      *
-     * @param string $providedToken The JWT token to verify.
+     * @param Token $token The JWT token.
      */
-    public function __construct(string $providedToken)
+    public function __construct(Token $token)
     {
-        $this->token = new Token($providedToken);
+        $this->token = $token;
     }
 
     /**
-     * Verifies the authenticity of a JWT token.
+     * Get the public key resource from the provided public key string.
      *
-     * @return bool true or false
+     * @param string $publicKey The public key string.
+     * @return OpenSSLAsymmetricKey The public key resource.
+     * @throws RSAException If an error occurs while getting the public key.
      */
-    abstract public function isTokenValid(): bool;
-
-    /**
-     * Verifies if the provided signature matches the expected signature and the token is not expired.
-     *
-     * @param string $expectedSignature The expected signature to verify against.
-     *
-     * @return bool Returns true if the signature is valid and the token is not expired, false otherwise.
-     */
-    public function verify(string $expectedSignature): bool
+    protected function getPublicKey(string $publicKey): OpenSSLAsymmetricKey
     {
-        return !$this->token->isExpired() && $this->token->isValid($expectedSignature);
+        $publicKeyResource = openssl_pkey_get_public($publicKey);
+
+        if ($publicKeyResource === false) {
+            throw new RSAException("An error occurred while getting the public key:  ". openssl_error_string());
+        }
+        return $publicKeyResource;
     }
 
     /**
-     * Checks if the token is expired.
+     * Verify the provided token with the given public key.
      *
-     * @return bool Returns true if the token is expired, false otherwise.
+     * @param string $publicKey The public key string.
+     * @param Token $providedToken The token to verify.
+     * @return bool Returns true if the token is valid, false otherwise.
+     * @throws RSAException If an error occurs during token verification.
      */
-    public function isTokenExpired(): bool
+    protected function verifyWithPublicKey(string $publicKey, Token $providedToken): bool
     {
-        return $this->token->isExpired();
-    }
+        $publicKeyResource = $this->getPublicKey($publicKey);
+        $data = $providedToken->getOriginalHeader() . "." . $providedToken->getOriginalPayload();
 
-    /**
-     * Formats the expiration time of the token to a readable string representation.
-     *
-     * @return string The formatted expiration time in "Y-m-d H:i:s" format.
-     */
-    private function formatExpiration(): string
-    {
-        return DateTime::createFromFormat('U', $this->token->getExpirationTime())->format("Y-m-d H:i:s");
+        $isTokenValid = openssl_verify($data, $providedToken->getSignature(), $publicKeyResource, $providedToken->getAlgorithm()->getHashAlgorithm());
+
+        return $isTokenValid === 1;
     }
 }

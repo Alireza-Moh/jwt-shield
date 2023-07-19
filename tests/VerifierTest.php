@@ -2,7 +2,6 @@
 
 namespace AlirezaMoh\JwtShield\Tests;
 
-
 use AlirezaMoh\JwtShield\JWT;
 use AlirezaMoh\JwtShield\Services\Signatures\ECDSASignature;
 use AlirezaMoh\JwtShield\Services\Signatures\HMACSignature;
@@ -10,7 +9,7 @@ use AlirezaMoh\JwtShield\Services\Signatures\RSASignature;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use PHPUnit\Framework\TestCase;
 
-class JWTTest extends TestCase
+class VerifierTest extends TestCase
 {
     /**
      * @dataProvider algorithmDataProvider
