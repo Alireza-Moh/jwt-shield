@@ -243,6 +243,8 @@ final class Token
      */
     private function convertToClaimObject(): void
     {
+        $claimRegistry = null;
+
         foreach ($this->payload as $key => $value) {
             try {
                 $claimRegistry = ClaimRegistry::from($key);

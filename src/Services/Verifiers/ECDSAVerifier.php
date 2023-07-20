@@ -3,6 +3,7 @@
 namespace AlirezaMoh\JwtShield\Services\Verifiers;
 
 use AlirezaMoh\JwtShield\Exceptions\RSAException;
+use AlirezaMoh\JwtShield\Exceptions\TokenException;
 use AlirezaMoh\JwtShield\Token;
 
 /**
@@ -19,7 +20,7 @@ class ECDSAVerifier extends BaseVerifier
      * Checks if the token is valid by verifying its ECDSA signature.
      *
      * @return bool Returns true if the token's signature is valid, false otherwise.
-     * @throws RSAException
+     * @throws RSAException|TokenException
      */
     public function isTokenValid(string $publicKey): bool
     {

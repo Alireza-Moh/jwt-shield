@@ -1,6 +1,6 @@
 <?php
 
-namespace AlirezaMoh\JwtShield\Tests;
+namespace AlirezaMoh\JwtShield\Test;
 
 
 use AlirezaMoh\JwtShield\JWT;

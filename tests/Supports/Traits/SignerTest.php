@@ -1,6 +1,6 @@
 <?php
 
-namespace AlirezaMoh\JwtShield\Tests\Supports\Traits;
+namespace AlirezaMoh\JwtShield\Test\Supports\Traits;
 
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;

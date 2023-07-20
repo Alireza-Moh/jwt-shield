@@ -36,7 +36,6 @@ trait TokenGenerator
      */
     public function preparePayload(): string
     {
-
         $this->prepareModifiedClaims();
 
         return $this->encodeBase64(json_encode($this->claims));
