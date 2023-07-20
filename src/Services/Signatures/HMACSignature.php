@@ -27,12 +27,12 @@ class HMACSignature extends BaseSignature
      */
     public function generate(array $customClaims, string $secretKey, DateTime $expiration = new DateTime("+60 min")): string
     {
-        $this->customClaims = $customClaims;
+        [$header, $payload] = $this->initToken($customClaims, $expiration);
 
-        $header = $this->prepareHeader($this->algorithm);
-        $payload = $this->preparePayload($expiration, $customClaims);
+        $signedSignature = $this->sign($this->algorithm, $header . '.' . $payload, $secretKey);
 
-        $encodedSignature = $this->encodeBase64($this->sign($this->algorithm, $header . '.' . $payload, $secretKey));
+        $encodedSignature = $this->encodeBase64($signedSignature);
+
         return $header . '.' . $payload . '.' . $encodedSignature;
     }
 }

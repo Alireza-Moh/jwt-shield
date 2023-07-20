@@ -25,9 +25,7 @@ class ECDSASignature extends BaseSignature
      */
     public function generate(array $customClaims, string $privateKey, DateTime $expiration = new DateTime("+60 min")): string
     {
-        $this->customClaims = $customClaims;
-        $header = $this->prepareHeader($this->algorithm);
-        $payload = $this->preparePayload($expiration, $this->customClaims);
+        [$header, $payload] = $this->initToken($customClaims, $expiration);
 
         $signature = $this->signEcdsa($header . '.' . $payload, $privateKey);
 

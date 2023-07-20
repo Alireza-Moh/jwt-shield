@@ -29,9 +29,9 @@ final class Verifier
         $token = new Token($providedToken);
 
         return match ($token->getAlgorithm()) {
-            JWTAlgorithm::HS256,  JWTAlgorithm::HS384, JWTAlgorithm::HS512 => (new HMACVerifier($token)),
-            JWTAlgorithm::RS256, JWTAlgorithm::RS384, JWTAlgorithm::RS512 => (new RSAVerifier($token)),
-            JWTAlgorithm::ES256, JWTAlgorithm::ES384, JWTAlgorithm::ES512 => (new ECDSAVerifier($token)),
+            JWTAlgorithm::HS256,  JWTAlgorithm::HS384, JWTAlgorithm::HS512 => new HMACVerifier($token),
+            JWTAlgorithm::RS256, JWTAlgorithm::RS384, JWTAlgorithm::RS512 => new RSAVerifier($token),
+            JWTAlgorithm::ES256, JWTAlgorithm::ES384, JWTAlgorithm::ES512 => new ECDSAVerifier($token),
         };
     }
 }

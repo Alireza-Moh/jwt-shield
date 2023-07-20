@@ -22,9 +22,9 @@ final class JWT
     public static function getSignatureBuilder(JWTAlgorithm $algorithm): ECDSASignature|HMACSignature|RSASignature
     {
         return match ($algorithm) {
-            JWTAlgorithm::HS256,  JWTAlgorithm::HS384, JWTAlgorithm::HS512 => (new HMACSignature($algorithm)),
-            JWTAlgorithm::RS256, JWTAlgorithm::RS384, JWTAlgorithm::RS512 => (new RSASignature($algorithm)),
-            JWTAlgorithm::ES256, JWTAlgorithm::ES384, JWTAlgorithm::ES512 => (new ECDSASignature($algorithm)),
+            JWTAlgorithm::HS256,  JWTAlgorithm::HS384, JWTAlgorithm::HS512 => new HMACSignature($algorithm),
+            JWTAlgorithm::RS256, JWTAlgorithm::RS384, JWTAlgorithm::RS512 => new RSASignature($algorithm),
+            JWTAlgorithm::ES256, JWTAlgorithm::ES384, JWTAlgorithm::ES512 => new ECDSASignature($algorithm),
         };
     }
 }

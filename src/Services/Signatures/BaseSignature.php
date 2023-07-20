@@ -6,6 +6,7 @@ use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;
 use AlirezaMoh\JwtShield\Supports\Traits\Signer;
 use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
+use DateTime;
 
 /**
  * Abstract base class for signatures.
@@ -33,14 +34,14 @@ class BaseSignature
         $this->algorithm = $algorithm;
     }
 
-    /**
-     * Adds additional claims to the JWT.
-     *
-     * @param array $data The additional claims to add.
-     */
-    public function addClaims(array $data): void
+    protected function initToken(array $customClaims, DateTime $expiration): array
     {
-        $this->customClaims = array_merge($this->customClaims, $data);
+        $this->customClaims =  $customClaims;
+
+        $header = $this->prepareHeader($this->algorithm);
+        $payload = $this->preparePayload($expiration, $this->customClaims);
+
+        return [$header, $payload];
     }
 
     /**
@@ -49,13 +50,5 @@ class BaseSignature
     public function getAlgorithm(): JWTAlgorithm
     {
         return $this->algorithm;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCustomClaims(): array
-    {
-        return $this->customClaims;
     }
 }
