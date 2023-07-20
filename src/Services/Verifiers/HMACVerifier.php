@@ -2,6 +2,7 @@
 
 namespace AlirezaMoh\JwtShield\Services\Verifiers;
 
+use AlirezaMoh\JwtShield\Exceptions\TokenException;
 use AlirezaMoh\JwtShield\Token;
 
 /**
@@ -20,13 +21,13 @@ class HMACVerifier extends BaseVerifier
      * Verify the JWT token using HMAC signature.
      * @param string $secretKey The secret key used to sign the token.
      * @return bool True if the token is verified successfully, false otherwise.
+     * @throws TokenException
      */
     public function isTokenValid(string $secretKey): bool
     {
         $expectedSignature = $this->getExpectedSignature($secretKey);
 
         return !$this->token->isExpired() && hash_equals($expectedSignature, $this->token->getSignature());
-
     }
 
     /**
@@ -36,6 +37,7 @@ class HMACVerifier extends BaseVerifier
      */
     public function getExpectedSignature(string $secretKey): string
     {
+
         $data = $this->token->getOriginalHeader() . '.' . $this->token->getOriginalPayload();
         return $this->sign($this->token->getAlgorithm(), $data, $secretKey);
     }

@@ -4,7 +4,6 @@ namespace AlirezaMoh\JwtShield\Services\Signatures;
 
 
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
-use DateTime;
 
 /**
  * Class HMACSignature
@@ -20,14 +19,12 @@ class HMACSignature extends BaseSignature
 
     /**
      * Generate the JWT with the HMAC signature.
-     * @param DateTime $expiration The expiration date of the JWT.
-     * @param array $customClaims The custom claims of the JWT.
      * @param string $secretKey The secret key of the JWT.
      * @return string The generated JWT with the HMAC signature.
      */
-    public function generate(array $customClaims, string $secretKey, DateTime $expiration = new DateTime("+60 min")): string
+    public function generate(string $secretKey): string
     {
-        [$header, $payload] = $this->initToken($customClaims, $expiration);
+        [$header, $payload] = $this->initToken();
 
         $signedSignature = $this->sign($this->algorithm, $header . '.' . $payload, $secretKey);
 

@@ -3,7 +3,6 @@
 namespace AlirezaMoh\JwtShield\Services\Signatures;
 
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
-use DateTime;
 
 /**
  * Represents an ECDSA signature for JWT (JSON Web Token) generation.
@@ -18,14 +17,12 @@ class ECDSASignature extends BaseSignature
 
     /**
      * Generates the ECDSA signature for the JWT.
-     * @param DateTime $expiration The expiration date.
-     * @param array $customClaims The custom claims.
      * @param string $privateKey The private key for generating the signature.
      * @return string The generated ECDSA token.
      */
-    public function generate(array $customClaims, string $privateKey, DateTime $expiration = new DateTime("+60 min")): string
+    public function generate(string $privateKey): string
     {
-        [$header, $payload] = $this->initToken($customClaims, $expiration);
+        [$header, $payload] = $this->initToken();
 
         $signature = $this->signEcdsa($header . '.' . $payload, $privateKey);
 
