@@ -4,6 +4,7 @@ namespace AlirezaMoh\JwtShield\Supports\Traits;
 
 use AlirezaMoh\JwtShield\Supports\Claims\Claim;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
+use DateTime;
 
 /**
  * Trait TokenGenerator
@@ -100,7 +101,7 @@ trait TokenGenerator
      */
     private function getClaimValue(Claim $claim): mixed
     {
-        if ($claim->isADatetimeInstance()) {
+        if ($claim->getValue() instanceof DateTime) {
             return $claim->getValue()->getTimestamp() * 1000;
         }
         return $claim->getValue();

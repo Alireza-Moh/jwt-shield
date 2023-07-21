@@ -2,8 +2,6 @@
 
 namespace AlirezaMoh\JwtShield\Supports\Claims;
 
-use DateTime;
-
 /**
  * Class ClaimRegistry
  *
@@ -61,15 +59,5 @@ class Claim
     public function isARegisteredClaim(): bool
     {
         return $this->name instanceof ClaimRegistry;
-    }
-
-    /**
-     * Check if the claim value is a DateTime instance.
-     *
-     * @return bool True if the claim value is a DateTime instance, false otherwise.
-     */
-    public function isADatetimeInstance(): bool
-    {
-        return $this->value instanceof DateTime;
     }
 }

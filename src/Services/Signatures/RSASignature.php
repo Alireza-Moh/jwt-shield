@@ -26,28 +26,8 @@ class RSASignature extends BaseSignature
     {
         [$header, $payload] = $this->initToken();
 
-        $signature = $this->signRsa($header . '.' . $payload, $privateKey);
+        $signature = $this->signWithPrivateKey($header . '.' . $payload, $privateKey, $this->algorithm);
 
         return $header . '.' . $payload . '.' . $signature;
-    }
-
-    /**
-     * Signs the given data using RSA with the private key.
-     *
-     * @param string $data The data to sign.
-     * @param string $privateKey The private key for generating the signature.
-     * @return string The base64-encoded RSA signature.
-     * @throws RSAException
-     */
-    private function signRsa(string $data, string $privateKey): string
-    {
-        $privateKey = openssl_pkey_get_private($privateKey);
-
-        $isSigned = openssl_sign($data, $signature, $privateKey, $this->algorithm->getHashAlgorithm());
-        if (!$isSigned) {
-            throw new RSAException('Failed to generate RSA signature.');
-        }
-
-        return $this->encodeBase64($signature);
     }
 }
