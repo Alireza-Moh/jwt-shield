@@ -2,9 +2,13 @@
 
 namespace AlirezaMoh\JwtShield;
 
+use AlirezaMoh\JwtShield\Exceptions\TokenException;
+use AlirezaMoh\JwtShield\Supports\Claims\Claim;
+use AlirezaMoh\JwtShield\Supports\Claims\ClaimRegistry;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;
 use DateTime;
+use ValueError;
 
 /**
  * Class Token
@@ -18,37 +22,51 @@ final class Token
     /**
      * @var string The JWT token.
      */
-    protected string $providedToken;
+    private string $providedToken;
 
     /**
      * @var array The decoded header of the JWT token.
      */
-    protected array $header;
+    private array $header;
 
     /**
      * @var array The decoded payload of the JWT token.
      */
-    protected array $payload;
+    private array $payload;
 
     /**
      * @var string The signature of the JWT token.
      */
-    public string $signature;
+    private string $signature;
 
     /**
      * @var JWTAlgorithm The algorithm used for signing and verifying the JWT token.
      */
-    protected JWTAlgorithm $algorithm;
+    private JWTAlgorithm $algorithm;
 
     /**
-     * @var string The issuer of the JWT token.
+     * @var DateTime $expirationTime The expiration time of the JWT (JSON Web Token).
+     *
      */
-    protected string $issuer;
+    private DateTime $expirationTime;
 
-    protected DateTime $expirationTime;
+    /**
+     * @var string $originalHeader The original header of the JWT (JSON Web Token).
+     *
+     */
+    private string $originalHeader;
 
-    protected string $originalHeader;
-    protected string $originalPayload;
+    /**
+     * @var string $originalPayload The original payload of the JWT (JSON Web Token).
+     *
+     */
+    private string $originalPayload;
+
+    /**
+     * @var array $claims The list of Claim objects representing the JWT claims.
+     *
+     */
+    private array $claims;
 
     /**
      * Token constructor.
@@ -104,14 +122,6 @@ final class Token
     }
 
     /**
-     * @return string
-     */
-    public function getIssuer(): string
-    {
-        return $this->issuer;
-    }
-
-    /**
      * @return DateTime
      */
     public function getExpirationTime(): DateTime
@@ -136,31 +146,30 @@ final class Token
     }
 
     /**
-     * Checks if the token is valid based on the provided signature.
-     * @param string $expectedSignature
-     * @return bool true if its valid and false if not
-     */
-    public function isValid(string $expectedSignature): bool
-    {
-        if ($this->providedToken === '') {
-            return false;
-        }
-        return hash_equals($expectedSignature, $this->signature);
-    }
-
-    /**
      * Checks if the token is expired
      * @return bool
+     * @throws TokenException
      */
     public function isExpired(): bool
     {
         $currentDateTime = new DateTime();
-        return $this->expirationTime < $currentDateTime;
+        $expiration = $this->getClaim("exp");
+
+        if (is_null($expiration)) {
+            throw new TokenException("Expiration date not found");
+        }
+        return $expiration < $currentDateTime;
     }
 
-    public function getFormattedExpirationTime(): string
+    public function getClaim(mixed $claimName): Claim|null
     {
-        return $this->expirationTime->format('Y-m-d H:i:s');
+        $foundedClaim = null;
+        foreach ($this->claims as $claim) {
+            if ($claim->getName() === $claimName) {
+                $foundedClaim = $claim;
+            }
+        }
+        return $foundedClaim;
     }
 
     /**
@@ -178,8 +187,7 @@ final class Token
         $this->originalPayload = $payload;
 
         $this->extractAlgorithm();
-        $this->extractIssuer();
-        $this->setExpirationTime($this->payload['exp']);
+        $this->convertToClaimObject();
     }
 
     /**
@@ -223,17 +231,27 @@ final class Token
     }
 
     /**
-     * Extracts the issuer from the parsed payload.
+     * Convert the payload data into Claim objects and add them to the claims array.
+     *
+     * This method iterates through each key-value pair in the payload array. For each key,
+     * it attempts to create a Claim object using the ClaimRegistry::from() method to identify
+     * the claim type.
+     *
+     * @throws ValueError If an invalid claim type is encountered in the payload.
+     *
+     * @return void
      */
-    private function extractIssuer(): void
+    private function convertToClaimObject(): void
     {
-        $this->issuer = $this->payload['iss'];
-    }
+        $claimRegistry = null;
 
-    private function setExpirationTime(int $exp): void
-    {
-        $date = new DateTime();
-        $date->setTimestamp(floor($exp / 1000));
-        $this->expirationTime = $date;
+        foreach ($this->payload as $key => $value) {
+            try {
+                $claimRegistry = ClaimRegistry::from($key);
+                $this->claims[] = new Claim($key, $value);
+            } catch (ValueError $e) {
+                $this->claims[] = new Claim($claimRegistry, $value);
+            }
+        }
     }
 }

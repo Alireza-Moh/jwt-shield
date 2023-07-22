@@ -1,6 +1,6 @@
 <?php
 
-namespace AlirezaMoh\JwtShield\Tests\Services\Signatures;
+namespace AlirezaMoh\JwtShield\Test\Services\Signatures;
 
 use AlirezaMoh\JwtShield\Services\Signatures\BaseSignature;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;

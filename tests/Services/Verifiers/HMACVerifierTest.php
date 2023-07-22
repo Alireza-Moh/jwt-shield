@@ -1,6 +1,6 @@
 <?php
 
-namespace AlirezaMoh\JwtShield\Tests\Services\Verifiers;
+namespace AlirezaMoh\JwtShield\Test\Services\Verifiers;
 
 use AlirezaMoh\JwtShield\Services\Verifiers\HMACVerifier;
 use AlirezaMoh\JwtShield\Token;

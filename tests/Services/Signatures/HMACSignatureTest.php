@@ -1,8 +1,10 @@
 <?php
 
-namespace AlirezaMoh\JwtShield\Tests\Services\Signatures;
+namespace AlirezaMoh\JwtShield\Test\Services\Signatures;
 
 use AlirezaMoh\JwtShield\Services\Signatures\HMACSignature;
+use AlirezaMoh\JwtShield\Supports\Claims\Claim;
+use AlirezaMoh\JwtShield\Supports\Claims\ClaimRegistry;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use PHPUnit\Framework\TestCase;
 
@@ -14,10 +16,13 @@ class HMACSignatureTest extends TestCase
     public function should_not_be_empty_token(): void
     {
         $signature = new HMACSignature(JWTAlgorithm::HS512);
-        $expiration = new \DateTime("+1 day");
-        $claims = ["userId" => 545432, "username" => "test"];
 
-        $token = $signature->generate($claims, "secret", $expiration);
+        $signature->addClaims([
+            new Claim("username",  "test"),
+            new Claim(ClaimRegistry::EXP,  new \DateTime("+1 day")),
+            new Claim("userId",  545432),
+        ]);
+        $token = $signature->generate(file_get_contents(__DIR__."/private_key.pem"));
 
         $this->assertNotEmpty($token);
         $this->assertIsString($token);
