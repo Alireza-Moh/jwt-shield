@@ -1,19 +1,18 @@
 ## Generating token with RSA
 ```php
-$claims = [
-    "userId" => "54684351",
-    "username" => "Test user",
-];
-
 $privateKey = file_get_contents("../keys/private_key.pem");
 $expireDate = new DateTime("+2 days");
 
 try {
     $jwt = JWT::getSignatureBuilder(JWTAlgorithm::RS256);
-    
-    $token = $jwt->generate($claims, $privateKey, $expireDate);
-    
-} catch (RSAException $e) {
+    $jwt->addClaims([
+        new Claim(ClaimRegistry::EXI,  new DateTime("+2 days")),
+        new Claim(ClaimRegistry::EXP,  $expireDate),
+        new Claim("my_custom_claim",  "my_custom_data"),
+    ]);
+    $token = $jwt->generate($privateKey);
+  
+} catch (RSAException|TokenException $e) {
     echo $e->getMessage();
 }
 ```
@@ -28,7 +27,7 @@ try {
 
     $isValid = $verify->isTokenValid($publicKey);
     
-} catch (RSAException $e) {
+} catch (RSAException|TokenException $e) {
     echo $e->getMessage();
 }
 ```
