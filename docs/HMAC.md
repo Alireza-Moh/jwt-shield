@@ -1,19 +1,18 @@
 ## Generating token with HMAC
 ```php
-$claims = [
-    "userId" => "54684351",
-    "username" => "Test user",
-];
-
 $secretKey = "your_super_secret_key";
 $expireDate = new DateTime("+2 days");
 
 try {
     $jwt = JWT::getSignatureBuilder(JWTAlgorithm::HS512);
-    
-    $token = $jwt->generate($claims, $privateKey, $expireDate);
-    
-} catch (RSAException $e) {
+    $jwt->addClaims([
+        new Claim(ClaimRegistry::EXI,  new DateTime("+2 days")),
+        new Claim(ClaimRegistry::EXP,  $expireDate),
+        new Claim("my_custom_claim",  "my_custom_data"),
+    ]);
+    $token = $jwt->generate($secretKey);
+  
+} catch (RSAException|TokenException $e) {
     echo $e->getMessage();
 }
 ```
