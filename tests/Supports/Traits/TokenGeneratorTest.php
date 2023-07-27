@@ -4,12 +4,12 @@ namespace AlirezaMoh\JwtShield\Test\Supports\Traits;
 
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;
-use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
+use AlirezaMoh\JwtShield\Supports\Traits\ClaimHandler;
 use PHPUnit\Framework\TestCase;
 
 class TokenGeneratorTest extends TestCase
 {
-    use TokenGenerator, Base64;
+    use ClaimHandler, Base64;
 
     /**
      * @test
