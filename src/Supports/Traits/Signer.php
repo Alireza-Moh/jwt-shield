@@ -8,8 +8,6 @@ use InvalidArgumentException;
 
 
 /**
- * Trait Signer
- *
  * This trait provides a method for signing data using a JWTAlgorithm and secret key.
  */
 trait Signer

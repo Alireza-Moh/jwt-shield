@@ -5,7 +5,7 @@ namespace AlirezaMoh\JwtShield\Services\Verifiers;
 use AlirezaMoh\JwtShield\Exceptions\RSAException;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;
 use AlirezaMoh\JwtShield\Supports\Traits\Signer;
-use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
+use AlirezaMoh\JwtShield\Supports\Traits\ClaimHandler;
 use AlirezaMoh\JwtShield\Token;
 use OpenSSLAsymmetricKey;
 
@@ -16,7 +16,7 @@ use OpenSSLAsymmetricKey;
  */
 class BaseVerifier
 {
-    use Base64, TokenGenerator, Signer;
+    use Base64, ClaimHandler, Signer;
 
     /**
      * @var Token The JWT token.

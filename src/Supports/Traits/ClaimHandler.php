@@ -7,11 +7,9 @@ use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use DateTime;
 
 /**
- * Trait TokenGenerator
- *
  * This trait provides methods for preparing the header and payload sections of a JWT (JSON Web Token).
  */
-trait TokenGenerator
+trait ClaimHandler
 {
     /**
      * Prepare the JWT header.

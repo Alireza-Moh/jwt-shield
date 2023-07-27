@@ -3,8 +3,6 @@
 namespace AlirezaMoh\JwtShield\Supports\Traits;
 
 /**
- * Trait Base64
- *
  * This trait provides base64 encoding and decoding methods with URL-safe modifications.
  */
 trait Base64

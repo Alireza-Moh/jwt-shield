@@ -5,14 +5,14 @@ namespace AlirezaMoh\JwtShield\Services\Signatures;
 use AlirezaMoh\JwtShield\Supports\JWTAlgorithm;
 use AlirezaMoh\JwtShield\Supports\Traits\Base64;
 use AlirezaMoh\JwtShield\Supports\Traits\Signer;
-use AlirezaMoh\JwtShield\Supports\Traits\TokenGenerator;
+use AlirezaMoh\JwtShield\Supports\Traits\ClaimHandler;
 
 /**
  * Abstract base class for signatures.
  */
 class BaseSignature
 {
-    use Base64, TokenGenerator, Signer;
+    use Base64, ClaimHandler, Signer;
 
     /**
      * The algorithm used for generating or verifying tokens.
